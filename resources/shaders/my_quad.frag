@@ -24,12 +24,16 @@ void main()
   colors[7] = textureLodOffset(colorTex, surf.texCoord, 0, ivec2( 0, -1));
   colors[8] = textureLodOffset(colorTex, surf.texCoord, 0, ivec2( 1, -1));
 
-  vec4 averageColor = vec4(0.0);
-  for (int i = 0; i < colors.length(); i++)
+  for (int i = 0; i < 9; i++)
   {
-      averageColor += colors[i];
+      for (int j = 0; j < 9 - i - 1; j++)
+      {
+          vec4 ma = max(colors[j], colors[j+1]);
+          vec4 mi = min(colors[j], colors[j+1]);
+          colors[j] = mi;
+          colors[j+1] = ma;
+      }
   }
-  averageColor /= float(colors.length());
 
-  color = averageColor;
+  color = colors[4];
 }
