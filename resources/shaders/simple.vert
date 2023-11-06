@@ -33,7 +33,8 @@ void main(void)
 
     vOut.wPos     = (params.mModel * vec4(vPosNorm.xyz, 1.0f)).xyz;
 
-    float t = params.time;
+    float t = params.mTime;
+
     vOut.wPos.x *= abs(sin(t)) * 0.5 + 0.5;
     vOut.wPos.y *= abs(cos(t)) * 0.5 + 0.5;
     vOut.wPos.z *= abs(sin(t) + cos(t));
