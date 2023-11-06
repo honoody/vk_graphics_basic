@@ -35,9 +35,9 @@ void main(void)
 
     float t = params.mTime;
 
-    vOut.wPos.x *= abs(sin(t)) * 0.5 + 0.5;
-    vOut.wPos.y *= abs(cos(t)) * 0.5 + 0.5;
-    vOut.wPos.z *= abs(sin(t) + cos(t));
+    vOut.wPos.x *= abs(sin(t) + cos(t)) * 0.5;
+    vOut.wPos.y *= abs(sin(t) + cos(t)) * 0.5;
+    vOut.wPos.z *= abs(sin(t) + cos(t)) * 0.5;
 
     vOut.wNorm    = normalize(mat3(transpose(inverse(params.mModel))) * wNorm.xyz);
     vOut.wTangent = normalize(mat3(transpose(inverse(params.mModel))) * wTang.xyz);
