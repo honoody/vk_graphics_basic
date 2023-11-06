@@ -87,6 +87,7 @@ private:
   {
     float4x4 projView;
     float4x4 model;
+    float time = 0.0;
   } pushConst2M;
 
   float4x4 m_worldViewProj;
