@@ -9,8 +9,14 @@ endif()
 
 set(RENDER_SOURCE
         ../../render/scene_mgr.cpp
-#        ../../render/render_imgui.cpp
-        shadowmap_render.cpp)
+        ../../render/render_imgui.cpp
+        shadowmap_render.cpp
+        render_init.cpp
+        update.cpp
+        draw.cpp
+        present.cpp
+        gui.cpp
+)
 
 add_executable(shadowmap_renderer main.cpp ../../utils/glfw_window.cpp ${VK_UTILS_SRC} ${SCENE_LOADER_SRC} ${RENDER_SOURCE} ${IMGUI_SRC})
 
@@ -18,8 +24,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
     set_target_properties(shadowmap_renderer PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
     target_link_libraries(shadowmap_renderer PRIVATE project_options
-                          volk glfw3 project_warnings)
+                          glfw3 project_warnings etna ${CMAKE_DL_LIBS})
 else()
     target_link_libraries(shadowmap_renderer PRIVATE project_options
-                          volk glfw project_warnings) #
+                          glfw project_warnings etna ${CMAKE_DL_LIBS}) #
 endif()

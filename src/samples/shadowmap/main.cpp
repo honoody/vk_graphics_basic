@@ -1,7 +1,8 @@
 #include "shadowmap_render.h"
 #include "utils/glfw_window.h"
+#include <etna/Etna.hpp>
 
-void initVulkanGLFW(std::shared_ptr<IRender> &app, GLFWwindow* window, int deviceID)
+void initVulkanGLFW(std::shared_ptr<IRender> &app, GLFWwindow* window)
 {
   uint32_t glfwExtensionCount = 0;
   const char** glfwExtensions;
@@ -12,13 +13,13 @@ void initVulkanGLFW(std::shared_ptr<IRender> &app, GLFWwindow* window, int devic
     std::cout << "WARNING. Can't connect Vulkan to GLFW window (glfwGetRequiredInstanceExtensions returns NULL)" << std::endl;
   }
 
-  app->InitVulkan(glfwExtensions, glfwExtensionCount, deviceID);
+  app->InitVulkan(glfwExtensions, glfwExtensionCount, /* useless param */ 0);
 
   if(glfwExtensions != nullptr)
   {
     VkSurfaceKHR surface;
     VK_CHECK_RESULT(glfwCreateWindowSurface(app->GetVkInstance(), window, nullptr, &surface));
-//    setupImGuiContext(window);
+    setupImGuiContext(window);
     app->InitPresentation(surface, false);
   }
 }
@@ -27,7 +28,6 @@ int main()
 {
   constexpr int WIDTH = 1024;
   constexpr int HEIGHT = 1024;
-  constexpr int VULKAN_DEVICE_ID = 0;
 
   std::shared_ptr<IRender> app = std::make_unique<SimpleShadowmapRender>(WIDTH, HEIGHT);
   if(app == nullptr)
@@ -38,11 +38,15 @@ int main()
 
   auto* window = initWindow(WIDTH, HEIGHT);
 
-  initVulkanGLFW(app, window, VULKAN_DEVICE_ID);
+  initVulkanGLFW(app, window);
 
-  app->LoadScene("../resources/scenes/043_cornell_normals/statex_00001.xml", false);
+  app->LoadScene(VK_GRAPHICS_BASIC_ROOT "/resources/scenes/043_cornell_normals/statex_00001.xml", false);
 
-  mainLoop(app, window);
+  mainLoop(app, window, true);
+
+  app = {};
+  if (etna::is_initilized())
+    etna::shutdown();
 
   return 0;
 }
